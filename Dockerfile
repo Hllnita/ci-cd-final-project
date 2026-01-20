@@ -1,24 +1,26 @@
-# FROM python:3.11-slim
 FROM registry.access.redhat.com/ubi8/python-311
 
-# Establish a working folder
+# ၁။ Working directory သတ်မှတ်ခြင်း
 WORKDIR /app
 
-# Establish dependencies
+# ၂။ Dependencies သွင်းခြင်း (root user အနေနဲ့ အရင်သွင်းပါမယ်)
+USER 0
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-# RUN python -m pip install -U pip wheel && \
-    # pip install -r requirements.txt
 
-# Copy source files last because they change the most
+# ၃။ Source files များ ကူးယူခြင်း
 COPY service ./service
 
-# Become non-root user
-RUN useradd -m -r service && \
-    chown -R service:service /app
-USER service
+# ၄။ OpenShift Standard အတိုင်း Permission ပေးခြင်း (အရေးကြီးဆုံး အပိုင်း)
+# 'useradd' လုပ်မယ့်အစား root group (GID 0) ကို folder access ပေးရပါမယ်။
+# OpenShift ရဲ့ random user တွေဟာ ဒီ group ထဲမှာ ရှိနေမှာ ဖြစ်ပါတယ်။
+RUN chgrp -R 0 /app && \
+    chmod -R g=u /app
 
-# Run the service on port 8000
+# ၅။ UBI image မှာ ပါပြီးသား default non-root user (1001) ကို သုံးပါ
+USER 1001
+
+# ၆။ Run the service
 ENV PORT 8000
 EXPOSE $PORT
-CMD ["gunicorn", "service:app", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "service:app"]
