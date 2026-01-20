@@ -1,20 +1,22 @@
 FROM registry.access.redhat.com/ubi8/python-311
 
+# Establish a working folder
 WORKDIR /app
 
-# ၁။ Dependencies များ အရင်သွင်းပါ
+# Establish dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir --only-binary=:all: -r requirements.txt
+RUN python -m pip install -U pip wheel && \
+    pip install -r requirements.txt
 
-# ၂။ Project ထဲက service folder ကို ကူးယူပါ
+# Copy source files last because they change the most
 COPY service ./service
 
-# ၃။ OpenShift Permission အတွက် folder ကို root group ပေးပါ
-USER 0
-RUN chgrp -R 0 /app && chmod -R g=u /app
-USER 1001
+# Become non-root user
+RUN useradd -m -r service && \
+    chown -R service:service /app
+USER service
 
+# Run the service on port 8000
 ENV PORT 8000
-EXPOSE 8000
-
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "service:app"]
+EXPOSE $PORT
+CMD ["gunicorn", "service:app", "--bind", "0.0.0.0:8000"]
