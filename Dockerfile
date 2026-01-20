@@ -6,7 +6,8 @@ WORKDIR /app
 # ၂။ Dependencies သွင်းခြင်း (root user အနေနဲ့ အရင်သွင်းပါမယ်)
 USER 0
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt --compile --global-option="--jobs=1"
+RUN pip install --no-cache-dir --only-binary=:all: -r requirements.txt || \
+    pip install --no-cache-dir -r requirements.txt
 
 # ၃။ Source files များ ကူးယူခြင်း
 COPY service ./service
