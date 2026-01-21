@@ -1,38 +1,101 @@
-# CI/CD Tools and Practices Final Project Template
+CI/CD Final Project: Inventory Management / Counter Service
+===========================================================
 
-This repository contains the template to be used for the Final Project for the Coursera course **CI/CD Tools and Practices**.
+This project is the capstone for the **IBM/Coursera CI/CD Tools and Practices** course. It demonstrates a full DevOps lifecycle, including continuous integration, containerization, and automated deployment.
 
-## Usage
+🚀 Project Overview
+-------------------
 
-This repository is to be used as a template to create your own repository in your own GitHub account. No need to Fork it as it has been set up as a Template. This will avoid confusion when making Pull Requests in the future.
+The application is a RESTful microservice (Python/Flask or Node.js) designed to manage resources. The primary goal of this repository is to showcase a robust **CI/CD Pipeline** that automates:
 
-From the GitHub **Code** page, press the green **Use this template** button to create your own repository from this template.
+*   **Linting:** Ensuring code quality using flake8 or eslint.
+    
+*   **Unit Testing:** Running automated tests with pytest or jest.
+    
+*   **Building:** Creating Docker images for the service.
+    
+*   **Deployment:** Using Tekton pipelines or GitHub Actions to deploy to Kubernetes/OpenShift.
+    
 
-Name your repo: `ci-cd-final-project`.
+🛠 Tech Stack
+-------------
 
-## Setup
+*   **Language:** Python / JavaScript
+    
+*   **Framework:** Flask / Express.js
+    
+*   **CI/CD:** GitHub Actions, Tekton
+    
+*   **Containerization:** Docker
+    
+*   **Orchestration:** Kubernetes / Red Hat OpenShift
+    
 
-After entering the lab environment you will need to run the `setup.sh` script in the `./bin` folder to install the prerequisite software.
+🏗 Setup and Installation
+-------------------------
 
-```bash
-bash bin/setup.sh
-```
+### 1\. Prerequisites
 
-Then you must exit the shell and start a new one for the Python virtual environment to be activated.
+Ensure you have the following installed:
 
-```bash
-exit
-```
+*   Docker Desktop
+    
+*   Python 3.9+ (or Node.js)
+    
+*   kubectl (Kubernetes CLI)
+    
 
-## Tasks
+### 2\. Local Setup
 
+Bash
 
-## License
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   # Clone the repository  git clone https://github.com/Hllnita/ci-cd-final-project.git  cd ci-cd-final-project  # Run the setup script to install dependencies  bash bin/setup.sh  # Activate the virtual environment (if Python)  source venv/bin/activate   `
 
-Licensed under the Apache License. See [LICENSE](/LICENSE)
+🧪 Testing and Quality
+----------------------
 
-## Author
+The pipeline is configured to run automatically on every push to the main branch.
 
-Skills Network
+*   **Linting:** flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    
+*   **Unit Tests:** nosetests --with-spec --spec-color (or pytest)
+    
 
-## <h3 align="center"> © IBM Corporation 2023. All rights reserved. <h3/>
+🚢 CI/CD Pipeline Details
+-------------------------
+
+### GitHub Actions
+
+The workflow is defined in .github/workflows/workflow.yml. It performs the following jobs:
+
+1.  **Checkout:** Pulls the latest code.
+    
+2.  **Install Dependencies:** Sets up the environment.
+    
+3.  **Lint:** Checks for syntax and style errors.
+    
+4.  **Test:** Executes the test suite and checks coverage.
+    
+
+### Tekton Pipelines (CD)
+
+For Continuous Delivery, the project utilizes Tekton tasks located in the tekton/ directory:
+
+*   tasks.yaml: Defines individual steps like git-clone and build-ah.
+    
+*   pipeline.yaml: Chains tasks together for a full deployment flow.
+    
+
+🐳 Docker Support
+-----------------
+
+To build and run the application as a container:
+
+Bash
+
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   # Build the image  docker build -t ci-cd-final-project:latest .  # Run the container  docker run -p 8080:8080 ci-cd-final-project:latest   `
+
+📜 License
+----------
+
+This project is licensed under the **Apache License 2.0**.
