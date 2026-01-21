@@ -14,8 +14,17 @@ RUN python -m pip install --no-cache-dir -U pip wheel && \
 COPY service ./service
 
 # Become non-root user
-RUN useradd -m -r service && \
-    chown -R service:service /app
+# RUN useradd -m -r service && \
+# chown -R service:service /app
+RUN mkdir -p /app
+
+# 2. Grant ownership to the root group (GID 0)
+RUN chgrp -R 0 /app && \
+    chmod -R g=u /app
+
+# 3. (Optional) If your app needs to write to specific files/folders
+RUN chmod -R 775 /app
+
 USER service
 
 # Run the service on port 8000
